@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.util.List;
 
+//adding comment to check git working
 @Data
 public class OrganizationDto {
     private Long id;
