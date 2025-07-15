@@ -5,6 +5,7 @@ import com.portfolio.portfolio.security.jwt.JwtEntryPoint;
 import com.portfolio.portfolio.security.user.PortfolioUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +21,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.ui.Model;
 
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -28,6 +31,12 @@ public class OrganizationConfig {
     private final PortfolioUserDetailsService userDetailsService;
 
     private final JwtEntryPoint authEntryPoint;
+
+    @Value("${api.prefix}")
+    private static String API;
+
+    private static final List<String> SECURED_URLS =
+            List.of(API+"/experiences/**", API+"/organizations/**");
 
     @Bean
     public ModelMapper modelMapper() {return new ModelMapper();}
@@ -55,7 +64,7 @@ public class OrganizationConfig {
         return authProvider;
     }
 
-  /*  @Bean
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable)
@@ -67,5 +76,5 @@ public class OrganizationConfig {
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
 
-    }*/
+    }
 }

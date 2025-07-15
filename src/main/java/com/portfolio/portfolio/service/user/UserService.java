@@ -9,6 +9,7 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,6 +20,7 @@ public class UserService implements IUserService {
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -30,7 +32,8 @@ public class UserService implements IUserService {
                     user.setEmail(request.getEmail());
                     user.setFirstName(request.getFirstName());
                     user.setLastName(request.getLastName());
-                    user.setPassword(request.getPassword());
+                    //earlier it was just get password, hence we need to encode it using bean
+                    user.setPassword(passwordEncoder.encode(request.getPassword()));
                     return userRepository.save(user);
                 }).orElseThrow(() -> new EntityExistsException("User with email " + request.getEmail() + " already exists"));
     }
