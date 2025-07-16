@@ -9,7 +9,7 @@ import java.util.List;
 public interface ExperienceRepository extends JpaRepository<Experience, Long> {
     List<Experience> findByOrganizationId(Long organizationId);
 
-    //becayse it may be possible user just enter substring of product name hence wrote this query
+    //because it may be possible user just enter substring of experience name hence wrote this query
     @Query("SELECT e FROM  Experience e WHERE LOWER(e.name) LIKE LOWER(CONCAT('%', :name, '%'))")
     List<Experience> findByName(String name);
 }
