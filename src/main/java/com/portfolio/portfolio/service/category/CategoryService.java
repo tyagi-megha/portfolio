@@ -34,9 +34,17 @@ public class CategoryService implements ICategoryService{
 
     @Override
     public Category updateCategory(Category category, Long categoryId) {
+        return Optional.ofNullable(
+                findCategoryById(categoryId)).map(oldCategory -> {
+            oldCategory.setName(category.getName());
+            return categoryRepository.save(oldCategory);
+        }).orElseThrow(() -> new EntityNotFoundException("Category not found!"));
+
+        /* more simplified version byt issue as we are saving the old category object only
         return Optional.ofNullable(findCategoryById(categoryId))
                 .map(categoryRepository :: save)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+         */
     }
 
     @Override
